@@ -26,8 +26,16 @@ const ToDo = () => {
 
   // Save tasks to localStorage whenever tasks change
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(tasks));
+    const savedTasks = tasks.map((t) => ({
+      name: t.name,
+      checked: t.checked,
+      addedTimestamp: t.addedTimestamp,
+      statusUpdateTimestamp: t.statusUpdateTimestamp || null,
+    }));
+
+    localStorage.setItem(localStorageKey, JSON.stringify(savedTasks));
   }, [tasks]);
+
 
   // Add new task when pressing Enter
   const handleKeyDown = (e) => {
