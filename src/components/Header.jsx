@@ -1,21 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import acheivifyLogo from '../assets/acheivify.jpg';
+import '../styles/Header.css';
 
-// Header Component
-const Header = ({ setPage }) => (
-    <header>
-        {/* Logo click also navigates to home page */}
-        <img src={acheivifyLogo} alt="Logo" className="logo-img" onClick={() => setPage('home')} style={{ cursor: 'pointer' }} />
-        <p>
-            <a 
-                href="#" 
-                className="logo-text" 
-                onClick={(e) => { e.preventDefault(); setPage('home'); }}
-            >
-                ACHEIVIFY
-            </a>
-        </p>
-    </header>
-);
+// Header Component (uses react-router Link for navigation)
+const Header = () => {
+    return (
+        <header>
+            <div className="logo-wrapper">
+                <Link to="/" className="logo-link">
+                    <img src={acheivifyLogo} alt="Acheivify logo" className="logo-img" />
+                </Link>
+                <p>
+                    <Link to="/" className="logo-text">ACHEIVIFY</Link>
+                </p> 
+            </div>
+        </header>
+    );
+}
 
 export default Header;

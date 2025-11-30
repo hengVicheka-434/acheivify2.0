@@ -1,36 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 
-// Data structure for navigation to manage both key and display name
+// Navigation items with paths
 const NAV_ITEMS = [
-    { key: 'home', name: 'Home' },
-    { key: 'todo', name: 'To Do' },
-    { key: 'history', name: 'History' },
-    { key: 'archive', name: 'Archive' },
-    { key: 'contact', name: 'Contact Us' },
+    { key: 'home', path: '/', name: 'Home' },
+    { key: 'todo', path: '/todo', name: 'To Do' },
+    { key: 'history', path: '/history', name: 'History' },
+    { key: 'archive', path: '/archive', name: 'Archive' },
+    { key: 'contact', path: '/contact', name: 'Contact Us' },
 ];
 
-// Navigation Component now accepts the current page state and a setter function
-const Navigation = ({ currentPage, setPage }) => (
-    <nav>
-        <ul>
-            {NAV_ITEMS.map(item => (
-                <li key={item.key}>
-                    {/* The <a> tag now uses onClick to set the state instead of navigating */}
-                    <a
-                        href="#" // Use # to prevent page reload, or remove href entirely
-                        onClick={(e) => {
-                            e.preventDefault(); // Stop default anchor behavior
-                            setPage(item.key);
-                        }}
-                        // Optional: Highlight the active page
-                        style={{ color: currentPage === item.key ? '#8FB964' : 'black' }}
+const Navigation = ({ onLinkClick, isMobileView }) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    return (     
+        <>   
+            { !isMobileView ? (
+                <nav aria-label="Main Navigation" >
+                    <ul className="nav-list">
+                        {NAV_ITEMS.map((item) => (
+                            <li key={item.key} className="nav-item">
+                                <NavLink
+                                    to={item.path}
+                                    className={({ isActive }) => (isActive ? 'laptop-nav-link mobile-nav-active' : 'laptop-nav-link')}
+                                    onClick={onLinkClick}
+                                    end={item.path === '/'}
+                                >
+                                    {item.name}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            ) : (
+                <div className="mobile-nav-wrapper">
+                    <button 
+                        className="menu-button"
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Toggle menu"
                     >
-                        {item.name}
-                    </a>
-                </li>
-            ))}
-        </ul>
-    </nav>
-);
+                        <Menu />
+                    </button>
+                    {isMenuOpen && (
+                        <div 
+                            className="backdrop" 
+                            onClick={() => setIsMenuOpen(false)}
+                        ></div>
+                    )}
+
+                    {/* 2. Side Drawer Component */}
+                    <div className={`side-drawer ${isMenuOpen ? 'open' : ''}`}>
+
+                        <nav aria-label="Mobile Navigation">
+                            <ul className="mobile-nav-list">
+                                {NAV_ITEMS.map((item) => (
+                                    <li key={item.key} className="mobile-nav-item">
+                                        <NavLink
+                                            to={item.path}
+                                            className={({ isActive }) => (isActive ? 'mobile-nav-link mobile-nav-active' : 'mobile-nav-link')}
+                                            onClick={() => {
+                                                onLinkClick();
+                                                setIsMenuOpen(false);
+                                            }} 
+                                            end={item.path === '/'}
+                                        >
+                                            {item.name}
+                                        </NavLink>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
 
 export default Navigation;
