@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import ToDo from './pages/ToDo';
 import History from './pages/History';
@@ -9,48 +10,34 @@ import Navigation from './components/Navigations';
 import './styles/App.css';
 
 export const App = () => {
-    // State to manage the current view (default to 'home')
-    const [currentPage, setCurrentPage] = useState('home');
-
-    // Function to render the correct component based on state
-    const renderPage = () => {
-        switch (currentPage) {
-            case 'home':
-                return <Home />;
-            case 'todo':
-                return <ToDo />;
-            case 'history':
-                return <History />;
-            case 'archive':
-                return <Archive />;
-            case 'contact':
-                return <Contact />;
-            default:
-                return <Home />;
-        }
-    };
-
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
     return (
-        <>            
-            <div id="wrapper">
-                <div className="top">
-                    {/* Pass the state setter function to Header and Navigation */}
-                    <Header setPage={setCurrentPage} />
-                    <Navigation currentPage={currentPage} setPage={setCurrentPage} />
+        <div id="wrapper">
+            <div className='body-wrapper'>
+                <div className="top site-header">
+                    <Header />
+                    <Navigation isMobileView={isMobileView} onLinkClick={() => setIsMenuOpen(false)} />
                 </div>
 
-                {/* Render the current page content */}
-                {renderPage()}
-
-                {/* Footer Component (using the original structure) */}
-                <footer>
-                    <div id="contact">
-                        <p><br/>Copyright &copy; 2025 Acheivify</p>
-                        <a className="email-link" href="mailto:h.h.vicheka@gmail.com">acheivify@gmail.com</a>
-                    </div>
-                </footer>
+                <div>
+                    <Routes>
+                        <Route path="/" element={<Home />}/>
+                        <Route path="/todo" element={<ToDo />} />
+                        <Route path="/history" element={<History />} />
+                        <Route path="/archive" element={<Archive />} />
+                        <Route path="/contact" element={<Contact />} />
+                    </Routes>
+                </div>
             </div>
-        </>
+
+            <footer>
+                <div id="contact" className="footer">
+                    <p><br/>Copyright &copy; 2025 Acheivify</p>
+                    <a className="email-link" href="mailto:h.h.vicheka@gmail.com">acheivify@gmail.com</a>
+                </div>
+            </footer>
+        </div>
     );
 };
 
