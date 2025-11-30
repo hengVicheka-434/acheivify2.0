@@ -3,6 +3,7 @@ import PageContent from '../components/PageContent';
 import LoadingComponent from '../components/LoadingComponent';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
+import { formatTimestamp } from '../helper_functions/helpers';
 import '../styles/App.css';
 
 //dummy test data
@@ -35,14 +36,16 @@ const Archive = () => {
     useEffect(() => {
         setLoading(true);
         // Fetch history data from local storage
-        const storedTasks = JSON.parse(localStorage.getItem('taskListData')) || [];
+        const storedTasks = (JSON.parse(localStorage.getItem('taskListData'))).filter(task => task.status === 'Completed' && task.timeCompleted && new Date(task.timeCompleted).getTime() < oneDayAgo) || [];
         // get only archived tasks from status completed more than one day ago
         setArchivedData(
-            storedTasks.filter(task =>
-                task.status === 'Completed' &&
-                task.timeCompleted &&
-                new Date(task.timeCompleted).getTime() < oneDayAgo
-            ) || testData
+            storedTasks.map(task => ({
+                name: task.name,
+                status: task.status ? 'Completed' : 'Pending',
+                priority: task.priority,
+                timeAdded: formatTimestamp(task.addedTimestamp),
+                timeCompleted: formatTimestamp(task.statusUpdateTimestamp)
+            })) 
         );
         setLoading(false);
     }, []);
@@ -82,14 +85,14 @@ const Archive = () => {
                     <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                     <Filter filter={filter} setFilter={setFilter} />
                 </div>
-                { visibleData.length === 0 ? <p style={{ fontSize: '12px' }}>No history available.</p> : (
+                { visibleData.length === 0 ? <p style={{ fontSize: '12px' }}>No archived data available.</p> : (
                     <table id="taskTable" className='table-text'>
                         <thead>
                             <tr>
                                 <th>Task Name</th>
                                 <th>Status</th>
-                                <th>Time Added</th>
                                 <th>Priority</th>
+                                <th>Time Added</th>
                                 <th>Time Completed</th>
                                 <th>Actions</th>
                             </tr>
@@ -103,8 +106,8 @@ const Archive = () => {
                                     <tr key={idx}>
                                         <td>{task.name}</td>
                                         <td>{task.status}</td>
-                                        <td>{task.timeAdded}</td>
                                         <td className={`priority ${String(task.priority).toLowerCase()}`}>{task.priority}</td>
+                                        <td>{task.timeAdded}</td>
                                         <td>{task.timeCompleted}</td>
                                         <td>
                                             <button className="delete-button" onClick={() => handleDeleteArchivedHistory(deleteIndex, setArchivedData)}>Delete</button>

@@ -93,7 +93,7 @@ export default function Contact() {
             ></textarea>
           </div>
 
-          <button type="submit">Send</button>
+          <button type="submit" href={`mailto:vichekaheng2@gmail.com`}>Send</button>
         </form>
       </main>
 

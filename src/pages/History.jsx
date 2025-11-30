@@ -3,6 +3,7 @@ import PageContent from '../components/PageContent';
 import LoadingComponent from '../components/LoadingComponent';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
+import { formatTimestamp } from '../helper_functions/helpers';
 import '../styles/History.css';
 
 //dummy test data
@@ -34,8 +35,16 @@ const History = () => {
         setLoading(true);
         // Fetch history data from local storage
         const storedTasks = JSON.parse(localStorage.getItem('taskListData')) || [];
-        // setHistoryData(storedTasks);
-        setHistoryData(testData); // Use test data for now
+        setHistoryData(
+            storedTasks.map(task => ({
+                name: task.name,
+                status: task.status ? 'Completed' : 'Pending',
+                priority: task.priority,
+                timeAdded: formatTimestamp(task.addedTimestamp),
+                timeCompleted: formatTimestamp(task.statusUpdateTimestamp)
+            }))
+        );
+        // setHistoryData(testData); // Use test data for now
         setLoading(false);
     }, []);
 
@@ -79,8 +88,8 @@ const History = () => {
                             <tr>
                                 <th>Task Name</th>
                                 <th>Status</th>
-                                <th>Time Added</th>
                                 <th>Priority</th>
+                                <th>Time Added</th>
                                 <th>Time Completed</th>
                                 <th>Actions</th>
                             </tr>
@@ -94,8 +103,8 @@ const History = () => {
                                     <tr key={idx}>
                                         <td>{task.name}</td>
                                         <td>{task.status}</td>
-                                        <td>{task.timeAdded}</td>
                                         <td className={`priority ${String(task.priority).toLowerCase()}`}>{task.priority}</td>
+                                        <td>{task.timeAdded}</td>
                                         <td>{task.timeCompleted}</td>
                                         <td>
                                             <button className="delete-button" onClick={() => handleDeleteHistory(deleteIndex, setHistoryData)}>Delete</button>
