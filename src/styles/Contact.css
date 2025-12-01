@@ -1,8 +1,20 @@
 .contact-wrapper {
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+/* ensure the inner main and form can expand to full width */
+.contact-wrapper main {
+    width: 100%;
+}
+
+/* override global/contact form constraint so it can span full width */
+#contactForm {
+    max-width: none;
+    width: 100%;
+    margin: 0;
 }
 
 .textarea {
