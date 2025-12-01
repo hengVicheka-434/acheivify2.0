@@ -20,10 +20,16 @@ const ToDo = () => {
       // filter out tasks completed more than one day ago
       const filtered = parsed.filter(
         (t) =>
-          !(t.checked && now - (t.statusUpdateTimestamp || t.addedTimestamp) >= oneDay)
+          !(t.status && now - (t.statusUpdateTimestamp || t.addedTimestamp) >= oneDay)
       );
 
-      setTasks(filtered);
+      // ensure old tasks without priority get default
+      const withPriority = filtered.map((t) => ({
+        ...t,
+        priority: t.priority || "low",
+      }));
+
+      setTasks(withPriority);
     }
   }, []);
 
@@ -37,7 +43,8 @@ const ToDo = () => {
 
     const savedTasks = tasks.map((t) => ({
       name: t.name,
-      checked: t.checked,
+      status: t.status,
+      priority: t.priority, // save priority
       addedTimestamp: t.addedTimestamp,
       statusUpdateTimestamp: t.statusUpdateTimestamp  || null
     }));
@@ -56,7 +63,8 @@ const ToDo = () => {
 
       const newTask = {
         name,
-        checked: false,
+        status: false,
+        priority: "low", // default priority (Low)
         addedTimestamp: timestamp,
         statusUpdateTimestamp: null,
       };
@@ -71,8 +79,17 @@ const ToDo = () => {
     setTasks((prev) =>
       prev.map((t, i) =>
         i === index
-          ? { ...t, checked: !t.checked, statusUpdateTimestamp: Date.now() }
+          ? { ...t, status: !t.status, statusUpdateTimestamp: Date.now() }
           : t
+      )
+    );
+  };
+
+  // Change priority
+  const changePriority = (index, newPriority) => {
+    setTasks((prev) =>
+      prev.map((t, i) =>
+        i === index ? { ...t, priority: newPriority } : t
       )
     );
   };
@@ -131,7 +148,7 @@ const ToDo = () => {
             <input
               type="checkbox"
               className="task-checkbox"
-              checked={task.checked}
+              checked={task.status}
               onChange={() => toggleTask(index)}
             />
             {/* Edit mode */}
@@ -148,15 +165,32 @@ const ToDo = () => {
               <span
                 className="task-name"
                 style={{
-                  textDecoration: task.checked ? "line-through" : "none",
-                  color: task.checked ? "gray" : "black",
-                  opacity: task.checked ? 0.7 : 1,
+                  textDecoration: task.status ? "line-through" : "none",
+                  color: task.status ? "gray" : "black",
+                  opacity: task.status ? 0.7 : 1,
                   marginRight: "12px",
                 }}
               >
                 {task.name}
               </span>
             )}
+
+            {/* Priority dropdown */}
+            <select
+              value={task.priority}
+              onChange={(e) => changePriority(index, e.target.value)}
+              style={{
+                marginRight: "12px",
+                padding: "4px 6px",
+                borderRadius: "6px",
+                fontSize: "14px",
+                textTransform: "capitalize",
+              }}
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
 
             {/* Edit button */}
             <button

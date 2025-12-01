@@ -80,7 +80,7 @@ nav a {
     width: 250px; 
     max-width: 80vw; 
     height: 100vh;
-    background-color: #f8fbf8; 
+    background-color: white; 
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.15); 
     z-index: 100;
     transition: right 0.3s ease-out; 
@@ -108,7 +108,7 @@ nav a {
 
 .mobile-nav-link {
     display: block; 
-    padding: 12px 0;
+    padding: 12px;
     text-decoration: none;
     transition: color 0.2s;
     border-bottom: 1px solid #eee; 
@@ -190,13 +190,9 @@ h1 {
     align-items: center;
 }
 
-.home-text {
-    font-size: 24px;
-}
-
 .home-img {
     width: 100%;
-    max-width: 447px;
+    max-width: 400px;
     height: auto;
 }
 

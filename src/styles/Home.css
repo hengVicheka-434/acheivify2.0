@@ -1,6 +1,7 @@
 .home {
   background: #fff;
   border: 1px solid #eee;
+  width: 100%;
   padding: 20px;
   border-radius: 6px;
 }
@@ -12,3 +13,43 @@
   border-radius: 6px;
 }
 .home h2 { margin-top: 0 }
+
+/* Layout for home content to ensure everything fits inside the .home box */
+.home {
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.home .home-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.home .text {
+  flex: 1 1 320px; /* grow, shrink, base width */
+  min-width: 220px;
+}
+
+.home .home-text {
+  font-size: 14px;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.home .home-img {
+  flex: 0 0 220px; /* fixed-ish image column on larger screens */
+  max-width: 40%;
+  height: auto;
+  display: block;
+  border-radius: 6px;
+}
+
+@media (max-width: 680px) {
+  .home .home-img {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-top: 12px;
+  }
+}

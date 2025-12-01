@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PageContent from "../components/PageContent";
 import "../styles/Contact.css";
 
 export default function Contact() {
@@ -18,16 +19,27 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
-    alert("Message Sent!");
+    // build a mailto link containing the form content
+    const to = "acheivify@gmail.com";
+    const subject = `Contact from ${formData.name || "Website Visitor"}`;
+    const bodyLines = [
+      `Name: ${formData.name}`,
+      `Email: ${formData.email}`,
+      `Reason for contacting: ${formData.reasons}`,
+      `Requests: ${formData.requests}`,
+    ];
+    const body = bodyLines.join("\r\n");
+
+    const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    // open the user's mail client with the composed message
+    window.location.href = mailto;
   };
 
   return (
-    <div id="wrapper">
-      
-
+    <PageContent pageTitle="Contact Us">
+      <div className="contact-wrapper">
       <main>
-        <h1>Contact Us</h1>
         <form id="contactForm" onSubmit={handleSubmit}>
           <div className="text">
             <label htmlFor="name">Name:</label>
@@ -73,11 +85,10 @@ export default function Contact() {
             ></textarea>
           </div>
 
-          <button type="submit" href={`mailto:vichekaheng2@gmail.com`}>Send</button>
+          <button type="submit">Send</button>
         </form>
-      </main>
-
-      
-    </div>
+      </main>   
+      </div>   
+    </PageContent>
   );
 }
