@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import ToDo from './pages/ToDo';
@@ -12,6 +12,17 @@ import './styles/App.css';
 export const App = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 768);
+
+    // Keep `isMobileView` in sync with window size so mobile UI/backdrop
+    // doesn't remain visible after resizing the window.
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     return (
         <div id="wrapper">
             <div className='body-wrapper'>

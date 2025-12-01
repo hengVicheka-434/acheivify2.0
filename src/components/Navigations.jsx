@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 
@@ -13,6 +13,13 @@ const NAV_ITEMS = [
 
 const Navigation = ({ onLinkClick, isMobileView }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // If the viewport changes to desktop, ensure mobile menu/backdrop is closed
+    useEffect(() => {
+        if (!isMobileView) {
+            setIsMenuOpen(false);
+        }
+    }, [isMobileView]);
     return (     
         <>   
             { !isMobileView ? (

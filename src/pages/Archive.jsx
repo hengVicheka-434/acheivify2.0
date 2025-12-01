@@ -42,9 +42,9 @@ const Archive = () => {
             storedTasks.map(task => ({
                 name: task.name,
                 status: task.status ? 'Completed' : 'Pending',
-                priority: task.priority,
+                priority: formatTimestamp(task.priority),
                 timeAdded: formatTimestamp(task.addedTimestamp),
-                timeCompleted: formatTimestamp(task.statusUpdateTimestamp)
+                timeCompleted: task.statusUpdateTimestamp
             })) 
         );
         setLoading(false);

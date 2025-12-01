@@ -216,6 +216,130 @@ h1 {
     flex-grow: 1;
 }
 
+/* Responsive task controls */
+.task-item {
+    flex-wrap: wrap;
+}
+
+.task-name {
+    flex: 1 1 60%;
+    min-width: 120px;
+}
+
+.priority-select {
+    margin-right: 12px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.task-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.task-button.edit-button {
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+}
+
+.task-button.delete-button {
+    border: 1px solid #dc3545;
+    background-color: #dc3545;
+    color: white;
+}
+
+@media (max-width: 640px) {
+    .task-item {
+        gap: 12px;
+        padding: 12px;
+        font-size: 18px;
+    }
+
+    .task-name {
+        flex-basis: 100%;
+        order: 1;
+    }
+
+    .priority-select {
+        order: 2;
+        width: 140px;
+        margin-right: 0;
+    }
+
+    .task-button {
+        order: 3;
+        width: 48%;
+        margin-left: 0;
+    }
+
+    .task-button.edit-button {
+        margin-right: 4%;
+    }
+}
+
+/* Ensure controls stack as full-width blocks on small screens even if
+   components weren't given specific classes (handles reverted JS edits). */
+@media (max-width: 640px) {
+    .task-item {
+        flex-wrap: wrap;
+    }
+
+    .task-name {
+        flex-basis: 100%;
+        order: 1;
+    }
+
+    /* Priority select and buttons become full-width stacked controls */
+    .task-item > select,
+    .task-item > button {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 8px 0 0 0;
+        padding: 8px 10px;
+    }
+
+    /* Make the two buttons visually distinct when stacked */
+    .task-item > button {
+        color: #fff;
+        border-radius: 6px;
+        border: none;
+    }
+
+    .task-item > button:nth-of-type(1) {
+        background-color: #007bff; /* Edit (first button) */
+    }
+
+    .task-item > button:nth-of-type(2) {
+        background-color: #dc3545; /* Delete (second button) */
+    }
+}
+
+/* Ensure task controls are visible and not clipped */
+.task-item {
+    overflow: visible;
+}
+
+.task-item button {
+    display: inline-block;
+    min-width: 64px;
+}
+
+.task-item select {
+    display: inline-block;
+    min-width: 92px;
+}
+
+.task-name {
+    flex: 1 1 auto;
+}
+
 #task-form {
     display: flex;
     align-items: center;
