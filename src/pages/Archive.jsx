@@ -6,17 +6,6 @@ import Filter from '../components/Filter';
 import { formatTimestamp } from '../helper_functions/helpers';
 import '../styles/App.css';
 
-//dummy test data
-const testData = [
-    {
-        name: 'Task 1',
-        status: 'Completed',
-        timeAdded: '2024-01-01 10:00 AM',
-        priority: 'High',
-        timeCompleted: '2024-01-01 12:00 PM'
-    }
-];
-
 // handle delete history from local storage
 const handleDeleteArchivedHistory = (id, setArchivedData) => {
     const storedTasks = JSON.parse(localStorage.getItem('taskListData')) || [];
